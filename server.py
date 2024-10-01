@@ -1,26 +1,16 @@
 import socket
+import config
 
 
-def start_server():
-    host = "localhost"
-    port = 12345
-
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((host, port))
-    server_socket.listen()
-
-    print(f"Server is running and waiting for connections on {host}:{port}")
-    while True:
-        client_socket, addr = server_socket.accept()
-        print(f"Client connected from address: {addr}")
-
-        message = client_socket.recv(1024).decode()
-        print(f"Received message from client: {message}")
-
-        client_socket.send("Message received".encode())
-
-        client_socket.close()
+def udp_listener() -> None:
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.bind(('', config.UDP_PORT))
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        while True:
+            data, addr = s.recvfrom(1024)
+            if data == config.SERVER_PASSWORD:
+                s.sendto(config.CLIENT_PASSWORD, addr)
 
 
 if __name__ == "__main__":
-    start_server()
+    udp_listener()
