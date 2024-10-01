@@ -10,7 +10,7 @@ def find_server() -> Any:
         s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         s.bind(('', config.UDP_PORT))
         s.sendto(config.SERVER_PASSWORD, ('<broadcast>', config.UDP_PORT))
-        s.settimeout(5)
+        s.settimeout(10)
         host = socket.gethostbyname(socket.gethostname())
         try:
             while True:
