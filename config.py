@@ -1,3 +1,4 @@
 UDP_PORT = 50000
+TCP_PORT = 50001
 SERVER_PASSWORD = b'Where are you?'
 CLIENT_PASSWORD = b'Here I am'

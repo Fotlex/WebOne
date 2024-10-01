@@ -19,6 +19,17 @@ def find_server() -> Any:
             return None
 
 
+def connect_server(ip: Any):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((ip, config.TCP_PORT))
+        while True:
+            message = input()
+            s.sendall(message.encode())
+            data = s.recv(1024)
+            print(data.decode())
+
+
 if __name__ == '__main__':
     server_ip = find_server()
     print(server_ip)
+    connect_server(server_ip)
