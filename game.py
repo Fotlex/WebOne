@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel
+from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel
 
 
 class GameWindow(QMainWindow):
@@ -16,5 +16,3 @@ class GameWindow(QMainWindow):
 
         self.setWindowTitle("Главное окно")
         self.setGeometry(100, 100, 1000, 1000)
-
-
