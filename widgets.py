@@ -59,8 +59,8 @@ class GameWidget(QWidget):
         x, y = button.property('x'), button.property('y')
         print(f"Coordinates: ({x}, {y})")
         rnd = random.randint(0, 2)
-        content = ['mine', 'cupcake', 'empty'][rnd]
+        content = ['mine', 'empty', 'cupcake'][rnd]
         button.setIcon(QIcon(f'sprites/{content}.png'))
         button.setIconSize(QtCore.QSize(42, 42))
         button.clicked.disconnect(self.on_button_click)
-        self.network_manager.send_move(button.x, button.x, rnd)
+        self.network_manager.send_move(x, y, rnd)

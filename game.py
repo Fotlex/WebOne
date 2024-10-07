@@ -20,6 +20,7 @@ class NetworkThread(QThread):
 class GameWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.network_thread = None
         self.setCentralWidget(StartWidget(self.open_game_window))
 
     def open_game_window(self):
@@ -35,6 +36,7 @@ class GameWindow(QMainWindow):
         self.setCentralWidget(GameWidget(self.network_thread.network_manager))
 
     def closeEvent(self, event):
-        self.network_thread.terminate()
-        self.network_thread.wait()
+        if self.network_thread:
+            self.network_thread.terminate()
+            self.network_thread.wait()
         event.accept()
