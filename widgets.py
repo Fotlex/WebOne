@@ -40,10 +40,11 @@ class SearchWidget(QWidget):
 
 
 class GameWidget(QWidget):
-    def __init__(self, network_manager, is_my_turn):
+    def __init__(self, network_thread, is_my_turn):
         super().__init__()
         print(is_my_turn)
-        self.network_manager = network_manager
+        self.network_thread = network_thread
+        self.network_manager = network_thread.network_manager
         self.is_my_turn = is_my_turn
         self.buttons_left = 100
         self.my_score = 0
@@ -67,10 +68,14 @@ class GameWidget(QWidget):
             layout.addLayout(row_layout)
 
         self.setLayout(layout)
+        self.network_thread.move_recieved.connect(self._check_opponent_move)
         if not self.is_my_turn:
             QtCore.QTimer.singleShot(0, self._wait_for_opponent_move)
 
     def on_button_click(self):
+        if not self.is_my_turn:
+            return
+        self.is_my_turn = False
         button = self.sender()
 
         print(f"Coordinates: ({button.x}, {button.y})")
@@ -92,11 +97,11 @@ class GameWidget(QWidget):
             for btn in self.buttons[i]:
                 btn.setEnabled(False)
         QtCore.QCoreApplication.processEvents()
-        QtCore.QTimer.singleShot(0, self._check_opponent_move)
+        self.network_thread.listen_move.start()
 
-    def _check_opponent_move(self):
+    def _check_opponent_move(self, data):
         if self.buttons_left > 0:
-            row, col, item = self.network_manager.receive_move()
+            row, col, item = data
             button = self.buttons[row][col]
             content = ['mine', 'empty', 'cupcake'][item]
             button.setIcon(QIcon(f'sprites/{content}.png'))

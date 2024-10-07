@@ -17,6 +17,10 @@ class NetworkThread(QThread):
         is_my_turn = self.network_manager.initialize_network()
         self.networkInitialized.emit(is_my_turn)
 
+    def listen_move(self):
+        data = self.network_manager.receive_move()
+        self.move_received.emit(data)
+
 
 class GameWindow(QMainWindow):
     def __init__(self):
@@ -34,7 +38,8 @@ class GameWindow(QMainWindow):
         self.network_thread.start()
 
     def on_network_initialized(self, is_my_turn):
-        self.setCentralWidget(GameWidget(self.network_thread.network_manager, is_my_turn))
+        game_widget = GameWidget(self.network_thread, is_my_turn)
+        self.setCentralWidget(game_widget)
 
     def closeEvent(self, event):
         if self.network_thread:
