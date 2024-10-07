@@ -40,11 +40,12 @@ class SearchWidget(QWidget):
 
 
 class GameWidget(QWidget):
-    def __init__(self, network_manager, is_my_turn):
+    def __init__(self, network_manager, is_my_turn, network_thread):
         super().__init__()
         print(is_my_turn)
         self.network_manager = network_manager
         self.is_my_turn = is_my_turn
+        self.network_thread = network_thread
         self.buttons_left = 100
         self.my_score = 0
         self.opponent_score = 0
@@ -67,12 +68,11 @@ class GameWidget(QWidget):
             layout.addLayout(row_layout)
 
         self.setLayout(layout)
-        if not self.is_my_turn:
-            self._wait_for_opponent_move()
+        self.network_thread.networkInitialized.connect(self._check_opponent_move)
+        # if not self.is_my_turn:
+        #     self._wait_for_opponent_move()
 
     def on_button_click(self):
-        if not self.is_my_turn:
-            return
         button = self.sender()
 
         print(f"Coordinates: ({button.x}, {button.y})")
@@ -83,18 +83,18 @@ class GameWidget(QWidget):
         button.setIconSize(QtCore.QSize(42, 42))
         button.clicked.disconnect(self.on_button_click)
 
-        self.network_manager.send_move(button.x, button.y, rnd)
-        self.is_my_turn = False
         self._update_score()
-        self._wait_for_opponent_move()
+        self.network_manager.send_move(button.x, button.y, rnd)
+        # self._wait_for_opponent_move()
 
     def _wait_for_opponent_move(self):
-        self.setEnabled(False)
-        QtCore.QTimer.singleShot(0, self._check_opponent_move)
+        # self.setEnabled(False)
+        self.network_thread.networkInitialized.connect(self._check_opponent_move)
+        # QtCore.QTimer.singleShot(0, self._check_opponent_move)
 
-    def _check_opponent_move(self):
+    def _check_opponent_move(self, data):
         if self.buttons_left > 0:
-            row, col, item = self.network_manager.receive_move()
+            row, col, item = data
             button = self.buttons[row][col]
             content = ['mine', 'empty', 'cupcake'][item]
             button.setIcon(QIcon(f'sprites/{content}.png'))
