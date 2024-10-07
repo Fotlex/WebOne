@@ -68,7 +68,7 @@ class GameWidget(QWidget):
 
         self.setLayout(layout)
         if not self.is_my_turn:
-            self._wait_for_opponent_move()
+            QtCore.QTimer.singleShot(0, self._wait_for_opponent_move)
 
     def on_button_click(self):
         button = self.sender()
@@ -83,11 +83,12 @@ class GameWidget(QWidget):
 
         self._update_score()
         self.network_manager.send_move(button.x, button.y, rnd)
-        self._wait_for_opponent_move()
+        QtCore.QTimer.singleShot(0, self._wait_for_opponent_move)
 
     def _wait_for_opponent_move(self):
         QtCore.QCoreApplication.processEvents()
         self.setEnabled(False)
+        QtCore.QCoreApplication.processEvents()
         QtCore.QTimer.singleShot(0, self._check_opponent_move)
 
     def _check_opponent_move(self):
