@@ -6,8 +6,8 @@ from game import GameWindow
 class StartWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.game_window = GameWindow()
 
+        self.game_window = None
         self.grid_layout = QGridLayout()
         self.setLayout(self.grid_layout)
 
@@ -20,5 +20,7 @@ class StartWindow(QWidget):
         self.setGeometry(200, 50, 800, 600)
 
     def open_game_window(self):
+        self.game_window = GameWindow()
         self.game_window.show()
         self.close()
+        self.game_window.setup_network()
