@@ -21,6 +21,9 @@ class NetworkThread(QThread):
         data = self.network_manager.receive_move()
         self.move_received.emit(data)
 
+    def send_move(self, x, y, item):
+        self.network_manager.send_move(x, y, item)
+
 
 class GameWindow(QMainWindow):
     def __init__(self):

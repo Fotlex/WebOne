@@ -1,4 +1,5 @@
 import random
+from threading import Thread
 
 from PySide6 import QtCore
 from PySide6.QtGui import QIcon
@@ -68,7 +69,7 @@ class GameWidget(QWidget):
             layout.addLayout(row_layout)
 
         self.setLayout(layout)
-        self.network_thread.move_recieved.connect(self._check_opponent_move)
+        self.network_thread.move_received.connect(self._check_opponent_move)
         if not self.is_my_turn:
             QtCore.QTimer.singleShot(0, self._wait_for_opponent_move)
 
@@ -87,17 +88,14 @@ class GameWidget(QWidget):
         button.clicked.disconnect(self.on_button_click)
 
         self._update_score()
-        self.network_manager.send_move(button.x, button.y, rnd)
+        Thread(target=self.network_thread.send_move, args=(button.x, button.y, rnd), daemon=True).start()
         QtCore.QTimer.singleShot(0, self._wait_for_opponent_move)
 
     def _wait_for_opponent_move(self):
         QtCore.QCoreApplication.processEvents()
-        # self.setEnabled(False)
-        for i in range(len(self.buttons)):
-            for btn in self.buttons[i]:
-                btn.setEnabled(False)
+        self.setEnabled(False)
         QtCore.QCoreApplication.processEvents()
-        self.network_thread.listen_move.start()
+        Thread(target=self.network_thread.listen_move, daemon=True).start()
 
     def _check_opponent_move(self, data):
         if self.buttons_left > 0:
@@ -109,10 +107,7 @@ class GameWidget(QWidget):
             button.clicked.disconnect(self.on_button_click)
             self._update_score()
             self.is_my_turn = True
-            # self.setEnabled(True)
-            for i in range(len(self.buttons)):
-                for btn in self.buttons[i]:
-                    btn.setEnabled(True)
+            self.setEnabled(True)
         else:
             self._end_game()
 
