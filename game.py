@@ -38,6 +38,3 @@ class GameWindow(QMainWindow):
         network_manager = NetworkManager()
         is_my_turn = network_manager.initialize_network()
         self.setCentralWidget(GameWidget())
-
-    def spawn_game_zone(self) -> None:
-        pass
