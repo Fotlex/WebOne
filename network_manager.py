@@ -57,7 +57,7 @@ class NetworkManager:
         else:
             print("I'm client")
             self.connect_to_server(peer_ip)
-            print(f"Connected to server at {peer_ip}")
+            print(f'Connected to server at {peer_ip}')
             first_player = eval(self.receive_data().decode())
 
         return first_player
@@ -66,17 +66,17 @@ class NetworkManager:
         try:
             self.client_socket.sendall(data)
         except Exception as e:
-            print(f"Error sending data: {e}")
+            print(f'Error sending data: {e}')
 
     def receive_data(self) -> bytes:
         try:
             return self.client_socket.recv(1024)
         except Exception as e:
-            print(f"Error receiving data: {e}")
+            print(f'Error receiving data: {e}')
             return b""
 
-    def send_move(self, row: int, col: int) -> None:
-        move = f"{row},{col}"
+    def send_move(self, row: int, col: int, item: int) -> None:
+        move = f'{row},{col},{item}'
         print(move)
         self.send_data(move.encode())
 
