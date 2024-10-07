@@ -5,6 +5,13 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QWidget, QGridLayout, QPushButton, QVBoxLayout, QLabel, QHBoxLayout, QMessageBox
 
 
+class CoordinateButton(QPushButton):
+    def __init__(self, x, y, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.x = x
+        self.y = y
+
+
 class StartWidget(QWidget):
     def __init__(self, func):
         super().__init__()
@@ -50,12 +57,10 @@ class GameWidget(QWidget):
             self.buttons.append([])
             row_layout = QHBoxLayout()
             for j in range(10):
-                button = QPushButton()
+                button = CoordinateButton(i, j)
                 button.setIcon(QIcon('sprites/cloud.png'))
                 button.setIconSize(QtCore.QSize(42, 42))
                 button.setFixedSize(50, 50)
-                button.setProperty('x', i)
-                button.setProperty('y', j)
                 button.clicked.connect(self.on_button_click)
                 row_layout.addWidget(button)
                 self.buttons[i].append(button)
@@ -70,8 +75,7 @@ class GameWidget(QWidget):
             return
         button = self.sender()
 
-        x, y = button.property('x'), button.property('y')
-        print(f"Coordinates: ({x}, {y})")
+        print(f"Coordinates: ({button.x}, {button.y})")
         rnd = random.randint(0, 2)
         content = ['mine', 'empty', 'cupcake'][rnd]
         self.my_score += rnd - 1
@@ -79,7 +83,7 @@ class GameWidget(QWidget):
         button.setIconSize(QtCore.QSize(42, 42))
         button.clicked.disconnect(self.on_button_click)
 
-        self.network_manager.send_move(x, y, rnd)
+        self.network_manager.send_move(button.x, button.y, rnd)
         self.is_my_turn = False
         self._update_score()
         self._wait_for_opponent_move()
