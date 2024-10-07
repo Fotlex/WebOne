@@ -61,7 +61,7 @@ class GameWidget(QWidget):
         button = self.sender()
         if isinstance(button, CoordinateButton):
             print(f"Coordinates: ({button.x}, {button.y})")
-            content = ['mine', 'cupcake'][random.randint(0, 1)]
+            content = ['mine', 'cupcake', 'empty'][random.randint(0, 2)]
             button.setIcon(QIcon(f'sprites/{content}.png'))
             button.setIconSize(QtCore.QSize(42, 42))
             # button.setEnabled(False)
