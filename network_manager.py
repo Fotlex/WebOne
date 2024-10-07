@@ -80,7 +80,7 @@ class NetworkManager:
         print(move)
         self.send_data(move.encode())
 
-    def receive_move(self) -> Tuple[int, int]:
+    def receive_move(self) -> Tuple[int, int, int]:
         data = self.receive_data().decode()
-        row, col = (int(el) for el in data.split(','))
-        return row, col
+        row, col, item = (int(el) for el in data.split(','))
+        return row, col, item
