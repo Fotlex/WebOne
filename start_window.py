@@ -7,6 +7,7 @@ class StartWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.game_window = None
+
         self.grid_layout = QGridLayout()
         self.setLayout(self.grid_layout)
 

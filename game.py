@@ -1,4 +1,6 @@
+from PySide6 import QtCore
 from PySide6.QtCore import QThread, Signal, QTimer
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QHBoxLayout, QPushButton
 
 from network_manager import NetworkManager
@@ -22,7 +24,9 @@ class GameWidget(QWidget):
         for i in range(10):
             row_layout = QHBoxLayout()
             for j in range(10):
-                button = QPushButton(f"{i},{j}")
+                button = QPushButton()
+                button.setIcon(QIcon('sprites/cloud.png'))
+                button.setIconSize(QtCore.QSize(42, 42))
                 button.setFixedSize(50, 50)
                 row_layout.addWidget(button)
             layout.addLayout(row_layout)

@@ -84,11 +84,3 @@ class NetworkManager:
         data = self.receive_data().decode()
         row, col = (int(el) for el in data.split(','))
         return row, col
-
-
-# if __name__ == "__main__":
-#     network_manager = NetworkManager()
-#     is_my_turn = network_manager.initialize_network()
-#     print(is_my_turn)
-#     x, y = network_manager.receive_move()
-#     print(x, y)
