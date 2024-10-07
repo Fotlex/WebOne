@@ -32,7 +32,7 @@ class GameWindow(QMainWindow):
         self.network_thread.start()
 
     def on_network_initialized(self, is_my_turn):
-        self.setCentralWidget(GameWidget())
+        self.setCentralWidget(GameWidget(self.network_thread.network_manager))
 
     def closeEvent(self, event):
         self.network_thread.terminate()

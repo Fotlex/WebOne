@@ -33,8 +33,9 @@ class SearchWidget(QWidget):
 
 
 class GameWidget(QWidget):
-    def __init__(self):
+    def __init__(self, network_manager):
         super().__init__()
+        self.network_manager = network_manager
         layout = QVBoxLayout()
 
         for i in range(10):
@@ -54,9 +55,12 @@ class GameWidget(QWidget):
 
     def on_button_click(self):
         button = self.sender()
+
         x, y = button.property('x'), button.property('y')
         print(f"Coordinates: ({x}, {y})")
-        content = ['mine', 'cupcake', 'empty'][random.randint(0, 2)]
+        rnd = random.randint(0, 2)
+        content = ['mine', 'cupcake', 'empty'][rnd]
         button.setIcon(QIcon(f'sprites/{content}.png'))
         button.setIconSize(QtCore.QSize(42, 42))
         button.clicked.disconnect(self.on_button_click)
+        self.network_manager.send_move(button.x, button.x, rnd)
