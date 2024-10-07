@@ -1,37 +1,8 @@
-from PySide6 import QtCore
-from PySide6.QtCore import QThread, Signal, QTimer
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QLabel, QHBoxLayout, QPushButton
+from PySide6.QtCore import QThread, Signal
+from PySide6.QtWidgets import QMainWindow
 
 from network_manager import NetworkManager
-
-
-class SearchWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        layout = QVBoxLayout()
-        self.setLayout(layout)
-
-        self.label = QLabel("Поиск игры: ")
-        layout.addWidget(self.label)
-
-
-class GameWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        layout = QVBoxLayout()
-
-        for i in range(10):
-            row_layout = QHBoxLayout()
-            for j in range(10):
-                button = QPushButton()
-                button.setIcon(QIcon('sprites/cloud.png'))
-                button.setIconSize(QtCore.QSize(42, 42))
-                button.setFixedSize(50, 50)
-                row_layout.addWidget(button)
-            layout.addLayout(row_layout)
-
-        self.setLayout(layout)
+from widgets import *
 
 
 class NetworkThread(QThread):
@@ -49,9 +20,12 @@ class NetworkThread(QThread):
 class GameWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setCentralWidget(StartWidget(self.open_game_window))
 
+    def open_game_window(self):
         self.setCentralWidget(SearchWidget())
         self.network_thread = NetworkThread()
+        self.setup_network()
 
     def setup_network(self):
         self.network_thread.networkInitialized.connect(self.on_network_initialized)
@@ -64,10 +38,3 @@ class GameWindow(QMainWindow):
         self.network_thread.terminate()
         self.network_thread.wait()
         event.accept()
-
-
-def open_game_window(self):
-    self.game_window = GameWindow()
-    self.game_window.show()
-    QTimer.singleShot(0, self.game_window.setup_network)
-    self.close()
