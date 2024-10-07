@@ -5,13 +5,6 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QWidget, QGridLayout, QPushButton, QVBoxLayout, QLabel, QHBoxLayout
 
 
-class CoordinateButton(QPushButton):
-    def __init__(self, x, y, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.x = x
-        self.y = y
-
-
 class StartWidget(QWidget):
     def __init__(self, func):
         super().__init__()
@@ -47,10 +40,12 @@ class GameWidget(QWidget):
         for i in range(10):
             row_layout = QHBoxLayout()
             for j in range(10):
-                button = CoordinateButton(i, j)
+                button = QPushButton()
                 button.setIcon(QIcon('sprites/cloud.png'))
                 button.setIconSize(QtCore.QSize(42, 42))
                 button.setFixedSize(50, 50)
+                button.setProperty('x', i)
+                button.setProperty('y', j)
                 button.clicked.connect(self.on_button_click)
                 row_layout.addWidget(button)
             layout.addLayout(row_layout)
@@ -59,9 +54,9 @@ class GameWidget(QWidget):
 
     def on_button_click(self):
         button = self.sender()
-        if isinstance(button, CoordinateButton):
-            print(f"Coordinates: ({button.x}, {button.y})")
-            content = ['mine', 'cupcake', 'empty'][random.randint(0, 2)]
-            button.setIcon(QIcon(f'sprites/{content}.png'))
-            button.setIconSize(QtCore.QSize(42, 42))
-            # button.setEnabled(False)
+        x, y = button.property('x'), button.property('y')
+        print(f"Coordinates: ({x}, {y})")
+        content = ['mine', 'cupcake', 'empty'][random.randint(0, 2)]
+        button.setIcon(QIcon(f'sprites/{content}.png'))
+        button.setIconSize(QtCore.QSize(42, 42))
+        button.clicked.disconnect(self.on_button_click)
