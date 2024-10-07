@@ -87,7 +87,10 @@ class GameWidget(QWidget):
 
     def _wait_for_opponent_move(self):
         QtCore.QCoreApplication.processEvents()
-        self.setEnabled(False)
+        # self.setEnabled(False)
+        for i in range(len(self.buttons)):
+            for btn in self.buttons[i]:
+                btn.setEnabled(False)
         QtCore.QCoreApplication.processEvents()
         QtCore.QTimer.singleShot(0, self._check_opponent_move)
 
@@ -101,7 +104,10 @@ class GameWidget(QWidget):
             button.clicked.disconnect(self.on_button_click)
             self._update_score()
             self.is_my_turn = True
-            self.setEnabled(True)
+            # self.setEnabled(True)
+            for i in range(len(self.buttons)):
+                for btn in self.buttons[i]:
+                    btn.setEnabled(True)
         else:
             self._end_game()
 
