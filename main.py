@@ -2,7 +2,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from game import GameWindow
+from src.game_window import GameWindow
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

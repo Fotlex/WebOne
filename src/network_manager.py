@@ -2,7 +2,7 @@ import random
 import socket
 from typing import Tuple
 
-import config
+from . import config
 
 
 class NetworkManager:
