@@ -52,7 +52,7 @@ class GameWidget(QWidget):
         board_layout = QVBoxLayout()
 
         self.score_label = QLabel()
-        self.score_label.setStyleSheet("font-size: 24px")
+        self.score_label.setStyleSheet("font-size: 24px; color: black;")
         self.update_score()
 
         self.buttons = []
