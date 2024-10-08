@@ -2,23 +2,23 @@
 
 ![WebOne Game](sprites/cloud.png)
 
-**WebOne** — это интерактивная игра для двух игроков, сочетающая элементы удачи и стратегии, где каждый ход может принести очки или потерять их.
+**WebOne** is an interactive two-player game that combines elements of luck and strategy, where each move can earn or lose points.
 
-## Описание игры
+## Game Description
 
-- **Игровое поле**: 10x10 клеток, каждая из которых скрывает:
-  - Мину (-1 очко)
-  - Пустое место (0 очков)
-  - Пирожное (+1 очко)
+- **Game Board**: A 10x10 grid, where each cell hides:
+  - Mine (-1 point)
+  - Empty spot (0 points)
+  - Cupcake (+1 point)
 
-- **Цель**: Набрать больше очков, чем соперник, до того как все клетки будут открыты.
+- **Objective**: Score more points than your opponent before all cells are revealed.
 
-- **Особенности**:
-  - Многопользовательская игра через сеть.
-  - Интерфейс на PySide6.
-  - Случайное распределение объектов на поле.
+- **Features**:
+  - Multiplayer game over network.
+  - Interface built with PySide6.
+  - Random distribution of items on the board.
 
-## Как играть
+## How to Play
 
-- Игроки по очереди нажимают на кнопки, пытаясь найти пирожное и избегая мин.
-- Игра автоматически определяет, кто ходит первым.
+- Players take turns clicking on buttons, trying to find cupcakes while avoiding mines.
+- The game automatically decides who goes first.
