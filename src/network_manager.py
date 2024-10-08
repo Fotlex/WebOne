@@ -2,7 +2,7 @@ import random
 import socket
 from typing import Tuple
 
-import config
+from . import config
 
 
 class NetworkManager:
@@ -39,6 +39,7 @@ class NetworkManager:
             client_socket.close()
         print(f"Accepted connection from {addr}")
         self.client_socket = client_socket
+        server_socket.close()
 
     def connect_to_server(self, server_ip) -> None:
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
