@@ -16,8 +16,11 @@ class NetworkThread(QThread):
         self.network_initialized.emit(is_my_turn)
 
     def listen_move(self):
-        data = self.network_manager.receive_move()
-        self.move_received.emit(data)
+        try:
+            data = self.network_manager.receive_move()
+            self.move_received.emit(data)
+        except ValueError:
+            pass
 
     def send_move(self, x, y, item):
         self.network_manager.send_move(x, y, item)
