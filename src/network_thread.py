@@ -4,7 +4,7 @@ from .network_manager import NetworkManager
 
 
 class NetworkThread(QThread):
-    network_initialized = Signal(bool)
+    network_initialized = Signal(tuple)
     move_received = Signal(tuple)
 
     def __init__(self):
@@ -12,8 +12,8 @@ class NetworkThread(QThread):
         self.network_manager = NetworkManager()
 
     def run(self):
-        is_my_turn = self.network_manager.initialize_network()
-        self.network_initialized.emit(is_my_turn)
+        data = self.network_manager.initialize_network()
+        self.network_initialized.emit(data)
 
     def listen_move(self):
         try:
@@ -22,5 +22,5 @@ class NetworkThread(QThread):
         except ValueError:
             pass
 
-    def send_move(self, x, y, item):
-        self.network_manager.send_move(x, y, item)
+    def send_move(self, x, y):
+        self.network_manager.send_move(x, y)
